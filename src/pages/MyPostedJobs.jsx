@@ -1,13 +1,66 @@
 import { Link } from 'react-router-dom'
+/* eslint-disable no-unused-vars */
+import { useContext, useEffect, useState } from 'react'
+import axios from 'axios';
+import {format} from 'date-fns'
+import { AuthContext } from '../providers/AuthProvider';
+import toast from 'react-hot-toast'
 
 const MyPostedJobs = () => {
+  const {user} = useContext(AuthContext);
+  const [jobs, setJobs] = useState([]);
+
+  useEffect(()=>{
+    fetchAllJobs()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
+
+  const fetchAllJobs = async ()=>{
+    const{ data }= await axios.get(`${import.meta.env.VITE_API_URL}/jobs/${user?.email}`)
+    setJobs(data);
+  }
+
+  console.log(jobs);
+
+  const handleDelete = async id =>{
+    console.log(id);
+
+    try{
+      const {data} = await axios.delete(`${import.meta.env.VITE_API_URL}/job/${id}`)
+      console.log(data);
+      toast.success('data deleted successfully')
+      fetchAllJobs()
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
+
+  const modernDelete = id =>{
+    toast(t =>(
+      <div className='flex gap-3 items-center '>
+        <div>
+            <p>Are you <b>Sure?</b></p>
+        </div>
+        <div className='space-x-4'>
+            <button 
+            className='btn btn-sm btn-error'
+            onClick={()=> {
+              toast.dismiss(t.id)
+              handleDelete(id)
+            }}>Yes</button>
+            <button className='btn btn-sm btn-success' onClick={()=> toast.dismiss(t.id)}>Cancel</button>
+        </div>
+      </div>
+    ))
+  }
   return (
     <section className='container px-4 mx-auto pt-12'>
       <div className='flex items-center gap-x-3'>
         <h2 className='text-lg font-medium text-gray-800 '>My Posted Jobs</h2>
 
         <span className='px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full '>
-          4 Job
+          {jobs.length}
         </span>
       </div>
 
@@ -62,33 +115,40 @@ const MyPostedJobs = () => {
                   </tr>
                 </thead>
                 <tbody className='bg-white divide-y divide-gray-200 '>
-                  <tr>
+                  {/* generate dynamic tr  */}
+                  {
+                   jobs.map(job => (<tr key={job._id}>
                     <td className='px-4 py-4 text-sm text-gray-500  whitespace-nowrap'>
-                      E-commerce Website Development
+                      {job.title}
                     </td>
 
                     <td className='px-4 py-4 text-sm text-gray-500  whitespace-nowrap'>
-                      28/05/2024
+                      {format(new Date(job.deadline), 'P')}
                     </td>
 
                     <td className='px-4 py-4 text-sm text-gray-500  whitespace-nowrap'>
-                      $500-$600
+                      ${job.min_price}-${job.max_price}
                     </td>
                     <td className='px-4 py-4 text-sm whitespace-nowrap'>
                       <div className='flex items-center gap-x-2'>
                         <p
-                          className={`px-3 py-1  text-blue-500 bg-blue-100/60 text-xs  rounded-full`}
+                          className={`px-3 py-1
+
+                            ${job.category === 'Web Development' && 'badge badge-error'}
+                             ${job.category === 'Graphics Design' && 'badge badge-info'}
+                             ${job.category === 'Digital Marketing' && 'badge badge-warning'}
+                            `}
                         >
-                          Web Development
+                          {job.category}
                         </p>
                       </div>
                     </td>
                     <td className='px-4 py-4 text-sm text-gray-500  whitespace-nowrap'>
-                      Dramatically redefine bleeding-edge...
+                    {job.description.substring(0, 18)}...
                     </td>
                     <td className='px-4 py-4 text-sm whitespace-nowrap'>
                       <div className='flex items-center gap-x-6'>
-                        <button className='text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none'>
+                        <button onClick={() => modernDelete(job._id)} className='text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none'>
                           <svg
                             xmlns='http://www.w3.org/2000/svg'
                             fill='none'
@@ -106,7 +166,7 @@ const MyPostedJobs = () => {
                         </button>
 
                         <Link
-                          to={`/update/1`}
+                          to={`/update/${job._id}`}
                           className='text-gray-500 transition-colors duration-200   hover:text-yellow-500 focus:outline-none'
                         >
                           <svg
@@ -126,7 +186,8 @@ const MyPostedJobs = () => {
                         </Link>
                       </div>
                     </td>
-                  </tr>
+                  </tr>))
+                  }
                 </tbody>
               </table>
             </div>
