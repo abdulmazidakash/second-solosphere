@@ -63,8 +63,8 @@ This project uses the following NPM packages:
 
 ```plaintext
 src/
-├── assets/                   # Static assets
-├── components/               # Reusable components
+├── assets/                
+├── components/              
 │   │	└── Carousel.jsx
 │   │	└── Footer.jsx
 │   │	└── JobCard.jsx
@@ -73,10 +73,10 @@ src/
 │   │	└── Slide.jsx
 │   │	└── TabCategories.jsx
 ├── firebase/                 
-│   │	└── firebase.config.js# Firebase configuration
-├── layouts/                  # Layout components
+│   │	└── firebase.config.js
+├── layouts/                
 │   │	└── Main.jsx
-├── pages/                    # Application pages
+├── pages/                  
 │   │	├── Authentication/
 │	│	│		└── Login.jsx
 │	│	│		└── Register.jsx
@@ -89,9 +89,9 @@ src/
 │   │	└── MyBids.jsx
 │   │	└── MyPostedJobs.jsx
 │   │	└── UpdateJob.jsx
-├── providers/                  # Context API files
+├── providers/                  
 │   │	└── AuthProvider.jsx
-├── routes/                   # Routing files
+├── routes/                  
 │   │	└── PrivateRoute.jsx
 │   │	└── Routes.jsx
 └── index.css
