@@ -46,7 +46,7 @@ This project uses the following NPM packages:
 
 ## 🌐 Live Demo
 
-🔗 **[Live Project Link]https://second-solosphere-akash.netlify.app/)**
+🔗 **[[Live Project Link](https://second-solosphere-akash.netlify.app/)]**
 
 ---
 
