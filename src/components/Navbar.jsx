@@ -7,7 +7,7 @@ import { FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
   return (
-    <div className="navbar bg-base-100 shadow-sm container px-4 mx-auto">
+    <div className="navbar sticky bg-white  top-0 z-50 font-semibold  shadow-sm container px-4 mx-auto">
       <div className="flex-1">
         <Link to="/" className="flex gap-2 items-center">
           <img className="w-auto h-7" src={logo} alt="Logo" />
